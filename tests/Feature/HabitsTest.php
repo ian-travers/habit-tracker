@@ -52,4 +52,28 @@ class HabitsTest extends TestCase
         $response->assertRedirect('/habits');
         $this->assertDatabaseHas('habits', ['id' => $habit->id, ...$updatedHabit]);
     }
+
+    /** @test */
+    public function habits_cannot_be_created_without_name()
+    {
+        $habit = Habit::factory()->make([
+            'name' => null
+        ]);
+
+        $response = $this->post('/habits', $habit->toArray());
+
+        $response->assertSessionHasErrors('name');
+    }
+
+    /** @test */
+    public function habits_cannot_be_created_without_times_per_day()
+    {
+        $habit = Habit::factory()->make([
+            'times_per_day' => null
+        ]);
+
+        $response = $this->post('/habits', $habit->toArray());
+
+        $response->assertSessionHasErrors('times_per_day');
+    }
 }

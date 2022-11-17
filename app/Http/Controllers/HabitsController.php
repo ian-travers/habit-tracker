@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreHabitRequest;
 use App\Models\Habit;
 
 class HabitsController extends Controller
@@ -13,7 +14,7 @@ class HabitsController extends Controller
         return view('habits/index', ['habits' => $habits]);
     }
 
-    public function store()
+    public function store(StoreHabitRequest $request)
     {
         Habit::create([
             'name' => request()->input('name'),
