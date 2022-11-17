@@ -22,4 +22,34 @@ class HabitsTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewHas('habits', $habits);
     }
+
+    /** @test */
+    public function habits_can_be_created()
+    {
+        $this->withoutExceptionHandling();
+
+        $habit = Habit::factory()->make();
+
+        $response = $this->post('/habits', $habit->toArray());
+
+        $response->assertRedirect('/habits');
+        $this->assertDatabaseHas('habits', $habit->toArray());
+    }
+
+    /** @test */
+    public function habits_can_be_updated()
+    {
+        $this->withoutExceptionHandling();
+
+        $habit = Habit::factory()->create();
+        $updatedHabit = [
+            'name' => 'updated',
+            'times_per_day' => '5'
+        ];
+
+        $response = $this->put("/habits/{$habit->id}", $updatedHabit);
+
+        $response->assertRedirect('/habits');
+        $this->assertDatabaseHas('habits', ['id' => $habit->id, ...$updatedHabit]);
+    }
 }
