@@ -53,30 +53,6 @@ class HabitsTest extends TestCase
         $this->assertDatabaseHas('habits', ['id' => $habit->id, ...$updatedHabit]);
     }
 
-    /** @test */
-    // public function habits_cannot_be_created_without_name()
-    // {
-    //     $habit = Habit::factory()->make([
-    //         'name' => null
-    //     ]);
-
-    //     $response = $this->post('/habits', $habit->toArray());
-
-    //     $response->assertSessionHasErrors('name');
-    // }
-
-    /** @test */
-    // public function habits_cannot_be_created_without_times_per_day()
-    // {
-    //     $habit = Habit::factory()->make([
-    //         'times_per_day' => null
-    //     ]);
-
-    //     $response = $this->post('/habits', $habit->toArray());
-
-    //     $response->assertSessionHasErrors('times_per_day');
-    // }
-
     /** 
      * @test 
      * @dataProvider provideBadHabitData
@@ -84,6 +60,18 @@ class HabitsTest extends TestCase
     public function create_habit_validation($missing, $habit)
     {
         $response = $this->post('/habits', $habit);
+
+        $response->assertSessionHasErrors([$missing]);
+    }
+
+    /** 
+     * @test 
+     * @dataProvider provideBadHabitData
+     * */
+    public function update_habit_validation($missing, $updatedHabit)
+    {
+        $habit = Habit::factory()->create();
+        $response = $this->put("/habits/{$habit->id}", $updatedHabit);
 
         $response->assertSessionHasErrors([$missing]);
     }

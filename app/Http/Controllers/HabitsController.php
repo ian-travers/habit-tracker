@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreHabitRequest;
+use App\Http\Requests\UpdateHabitRequest;
 use App\Models\Habit;
 
 class HabitsController extends Controller
@@ -24,11 +25,11 @@ class HabitsController extends Controller
         return to_route('habits.index');
     }
 
-    public function update(Habit $habit)
+    public function update(UpdateHabitRequest $request, Habit $habit)
     {
         $habit->update([
-            'name' => request()->input('name'),
-            'times_per_day' => request()->input('times_per_day')
+            'name' => $request->input('name'),
+            'times_per_day' => $request->input('times_per_day')
         ]);
 
         return to_route('habits.index');
