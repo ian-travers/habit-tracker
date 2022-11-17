@@ -54,26 +54,59 @@ class HabitsTest extends TestCase
     }
 
     /** @test */
-    public function habits_cannot_be_created_without_name()
-    {
-        $habit = Habit::factory()->make([
-            'name' => null
-        ]);
+    // public function habits_cannot_be_created_without_name()
+    // {
+    //     $habit = Habit::factory()->make([
+    //         'name' => null
+    //     ]);
 
-        $response = $this->post('/habits', $habit->toArray());
+    //     $response = $this->post('/habits', $habit->toArray());
 
-        $response->assertSessionHasErrors('name');
-    }
+    //     $response->assertSessionHasErrors('name');
+    // }
 
     /** @test */
-    public function habits_cannot_be_created_without_times_per_day()
+    // public function habits_cannot_be_created_without_times_per_day()
+    // {
+    //     $habit = Habit::factory()->make([
+    //         'times_per_day' => null
+    //     ]);
+
+    //     $response = $this->post('/habits', $habit->toArray());
+
+    //     $response->assertSessionHasErrors('times_per_day');
+    // }
+
+    /** 
+     * @test 
+     * @dataProvider provideBadHabitData
+     * */
+    public function create_habit_validation($missing, $habit)
     {
-        $habit = Habit::factory()->make([
-            'times_per_day' => null
-        ]);
+        $response = $this->post('/habits', $habit);
 
-        $response = $this->post('/habits', $habit->toArray());
+        $response->assertSessionHasErrors([$missing]);
+    }
 
-        $response->assertSessionHasErrors('times_per_day');
+    public function provideBadHabitData()
+    {
+        $habit = Habit::factory()->make();
+
+        return [
+            'missing name' => [
+                'name',
+                [
+                    ...$habit->toArray(),
+                    'name' => null
+                ]
+            ],
+            'missing times_per_day' => [
+                'times_per_day',
+                [
+                    ...$habit->toArray(),
+                    'times_per_day' => null
+                ]
+            ]
+        ];
     }
 }
