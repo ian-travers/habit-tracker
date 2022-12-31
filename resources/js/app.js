@@ -5,9 +5,9 @@ import ExecuteButton from "./components/ExecuteButton.vue";
 import ProgressBar from "./components/ProgressBar.vue";
 
 createApp({
-    components: {
-        "habit-info": HabitInfo,
-        "execute-button": ExecuteButton,
-        "progress-bar": ProgressBar,
-    },
+  components: {
+    "habit-info": HabitInfo,
+    "execute-button": ExecuteButton,
+    "progress-bar": ProgressBar,
+  },
 }).mount("#app");
